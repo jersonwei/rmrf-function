@@ -28,7 +28,22 @@ export function getFunctionNode(code:string,index:number):FunctionNode|undefined
           start:path.node?.loc?.start,
           end:path.node?.loc?.end
         }
-
+      }
+    },
+    ArrowFunctionExpression(path){
+      const variableDeclarationPath = path.parentPath.parentPath
+      function getArrowFnName(){
+        return Object.keys(path.parentPath.getBindingIdentifiers())[0]
+      }
+      if(variableDeclarationPath?.isVariableDeclaration()){
+        console.log(variableDeclarationPath)
+        if(index >= variableDeclarationPath.node?.start! && index <= variableDeclarationPath.node?.end!){
+          functionNode = {
+            name:getArrowFnName(),
+            start:variableDeclarationPath.node?.loc?.start,
+            end:variableDeclarationPath.node?.loc?.end
+          }
+        }
       }
     }
   })
