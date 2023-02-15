@@ -1,7 +1,21 @@
 
 import {parse} from '@babel/parser'
 import traverse from '@babel/traverse'
-export function getFunctionNode(code:string,index:number) {
+
+export interface FunctionNode{
+  start:{
+    line:number,
+    column:number,
+    index:number
+  },
+  end:{
+    line:number,
+    column:number,
+    index:number
+  },
+  name:string
+}
+export function getFunctionNode(code:string,index:number):FunctionNode|undefined {
   let functionNode
   const ast = parse(code)
   traverse(ast,{
