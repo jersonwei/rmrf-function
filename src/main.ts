@@ -13,15 +13,14 @@ export interface FunctionNode{
     column:number,
     index:number
   },
-  name:string
+  name?:string,
+  params?:any
 }
 export function getFunctionNode(code:string,index:number):FunctionNode|undefined {
   let functionNode
   const ast = parse(code)
   traverse(ast,{
     FunctionDeclaration(path){
-      console.log(path.node)
-      // functionNode = path.node
       if(index >= path.node?.start! && index <= path.node?.end!){
         functionNode = {
           name:path.node.id?.name,
@@ -31,6 +30,21 @@ export function getFunctionNode(code:string,index:number):FunctionNode|undefined
       }
     },
     ArrowFunctionExpression(path){
+      const variableDeclarationPath = path.parentPath.parentPath
+      function getArrowFnName(){
+        return Object.keys(path.parentPath.getBindingIdentifiers())[0]
+      }
+      if(variableDeclarationPath?.isVariableDeclaration()){
+        if(index >= variableDeclarationPath.node?.start! && index <= variableDeclarationPath.node?.end!){
+          functionNode = {
+            name:getArrowFnName(),
+            start:variableDeclarationPath.node?.loc?.start,
+            end:variableDeclarationPath.node?.loc?.end
+          }
+        }
+      }
+    },
+    FunctionExpression(path){
       const variableDeclarationPath = path.parentPath.parentPath
       function getArrowFnName(){
         return Object.keys(path.parentPath.getBindingIdentifiers())[0]

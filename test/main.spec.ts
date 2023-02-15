@@ -24,13 +24,12 @@ test('init',() => {
   })
 })
 
-test.only('ArrowFunctionExpression',() => {
+test('ArrowFunctionExpression',() => {
   const code = `
   const getName = () => 'heihei'
   `
   const index = 10
   const functionNode = getFunctionNode(code,index)
-  console.log(functionNode)
   expect(functionNode).toEqual({
     name:'getName',
     start:{
@@ -38,6 +37,24 @@ test.only('ArrowFunctionExpression',() => {
     },
     end:{
       line: 2, column: 32, index: 33
+    }
+  })
+})
+test.only('FunctionExpression',() => {
+  const code = `
+  const getName = function () {
+   return 'heihei'
+  }
+  `
+  const index = 10
+  const functionNode = getFunctionNode(code,index)
+  expect(functionNode).toEqual({
+    name:'getName',
+    start:{
+      line: 2, column: 2, index: 3
+    },
+    end:{
+      line: 4, column: 3, index: 55
     }
   })
 })
