@@ -3,6 +3,7 @@
   "displayName": "vscode-rmrf-function",
   "description": "function plugin",
   "version": "0.0.1",
+  "publisher": "jersonwang",
   "engines": {
     "vscode": "^1.75.0"
   },
